@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package livraria;
-
 /**
  *
  * @author gabal
@@ -15,6 +14,8 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        livraria.cadastrarLivro(new Livro("As Crônicas de Nárnia", new Especificacao("C.S.Lewis", "Fantasia", 700, 0), false));
+        System.out.println(livraria.livros);
     }
     
 }
