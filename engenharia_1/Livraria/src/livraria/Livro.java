@@ -11,12 +11,12 @@ package livraria;
 public class Livro {
     private String titulo;
     private Especificacao espec;
-    private boolean disponivel;
+    private boolean disponivel = true;
+    private int quantAlugueis = 0;
 
-    public Livro(String titulo, Especificacao espec, boolean disponivel) {
+    public Livro(String titulo, Especificacao espec) {
         this.titulo = titulo;
         this.espec = espec;
-        this.disponivel = disponivel;
     }
 
     public String getTitulo() {
@@ -40,8 +40,26 @@ public class Livro {
         this.disponivel = status;
     }    
     
-    public boolean comparar(Especificacao especificacao){
-        return this.getEspec().getGenero().equals(especificacao.getGenero()) && this.getEspec().autor.equals(especificacao.autor)&& this.getEspec().getPaginas() == especificacao.getPaginas();
+    public int getQuantAlugueis() {
+        return quantAlugueis;
     }
+    public void setQuantAlugueis(int quantAlugueis) {
+        this.quantAlugueis = quantAlugueis;
+    }
+    
+    public void aluga(){
+        this.quantAlugueis += 1;
+    }
+    
+    public boolean comparar(Especificacao especificacao){
+        return this.getEspec().getGenero().equals(especificacao.getGenero()) && this.getEspec().getAutor().equals(especificacao.getAutor())&& this.getEspec().getPaginas() == especificacao.getPaginas();
+    }
+
+    @Override
+    public String toString() {
+        return this.getTitulo(); 
+    }
+    
+    
 
 }

@@ -15,6 +15,11 @@ public class Cliente {
     private String cpf;
     private List<Livro> historicoAlugueis = new LinkedList<Livro>();
 
+    public Cliente(String nome, String cpf) {
+        this.nome = nome;
+        this.cpf = cpf;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -36,6 +41,7 @@ public class Cliente {
     public void alugarLivro(Livro livro){
         historicoAlugueis.add(livro);
         livro.setDisponivel(false);
+        livro.aluga();
     }
     
     public void devolverLivro(Livro livro){

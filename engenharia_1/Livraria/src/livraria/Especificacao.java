@@ -9,16 +9,14 @@ package livraria;
  * @author gabal
  */
 public class Especificacao {
-    public String autor;
+    private String autor;
     private String genero;
     private int paginas;
-    private int quantAlugueis;
 
-    public Especificacao(String autor, String genero, int paginas, int quantAlugueis) {
+    public Especificacao(String autor, String genero, int paginas) {
         this.autor = autor;
         this.genero = genero;
         this.paginas = paginas;
-        this.quantAlugueis = quantAlugueis;
     }
     
     public String getAutor() {
@@ -42,10 +40,5 @@ public class Especificacao {
         this.paginas = paginas;
     }
 
-    public int getQuantAlugueis() {
-        return quantAlugueis;
-    }
-    public void setQuantAlugueis(int quantAlugueis) {
-        this.quantAlugueis = quantAlugueis;
-    }
+    
 }
