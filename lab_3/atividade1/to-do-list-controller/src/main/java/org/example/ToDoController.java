@@ -3,6 +3,8 @@ package org.example;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
@@ -37,15 +39,25 @@ public class ToDoController {
     }
 
     // Remover tarefa
-    @Operation(summary= "", description = "Altera uma Task pelo ID")
+    @Operation(summary = "", description = "Deleta uma Task pelo ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Task deletada com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Erro ao deletar API"),
+            @ApiResponse(responseCode = "400", description = "Erro ao deletar Task")
     })
     @DeleteMapping("/{id}")
-    public void deleteTask(@PathVariable long id) {
-        tasks.removeIf(task -> task.getId() == id);
+    public ResponseEntity<Task> deleteTask(@PathVariable long id) {
+        // Encontra a tarefa a ser deletada
+        Task task = tasks.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+
+        if (task != null) {
+            tasks.removeIf(t -> t.getId() == id);  // Remove a tarefa
+            return ResponseEntity.ok(task);  // Retorna a tarefa deletada com status 200
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();  // Retorna 400 se não encontrar a tarefa
+        }
     }
+
+
 
     // Alterar o status da tarefa (completa / incompleta)
     @Operation(summary= "", description = "Alterar uma Task pelo ID")
