@@ -1,4 +1,4 @@
-const apiUrl = "http://localhost:8080/tasks";  // URL correto do backend
+const apiUrl = "http://localhost:8080/tasks"; // URL correto do backend
 
 // Função para carregar as tarefas da API
 function loadTasks() {
@@ -6,14 +6,14 @@ function loadTasks() {
         .then(response => response.json())
         .then(data => {
             const taskList = document.getElementById('task-list');
-            taskList.innerHTML = '';  // Limpa a lista antes de repopulá-la
+            taskList.innerHTML = ''; // Limpa a lista antes de repopulá-la
 
             data.forEach(task => {
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <span class="${task.completed ? 'completed' : ''}" contenteditable="true" onblur="updateTask(${task.id}, this)">${task.name}</span>
-                    <button onclick="deleteTask(${task.id})">Deletar</button>
-                    <button onclick="toggleTaskCompletion(${task.id})">${task.completed ? 'Desmarcar' : 'Marcar como concluída'}</button>
+                    <button class="delete-btn" onclick="deleteTask(${task.id})">Deletar</button>
+                    <button class="status-btn ${task.completed ? 'completed-btn' : ''}" onclick="toggleTaskCompletion(${task.id}, this)">${task.completed ? 'Desmarcar' : 'Marcar como concluída'}</button>
                 `;
                 taskList.appendChild(li);
             });
@@ -43,8 +43,8 @@ function addTask() {
     })
     .then(response => response.json())
     .then(() => {
-        loadTasks();  // Recarrega as tarefas após adicionar
-        document.getElementById('task-name').value = '';  // Limpa o campo de input
+        loadTasks(); // Recarrega as tarefas após adicionar
+        document.getElementById('task-name').value = ''; // Limpa o campo de input
     })
     .catch(error => console.error('Erro ao adicionar a tarefa:', error));
 }
@@ -54,19 +54,19 @@ function deleteTask(id) {
     fetch(`${apiUrl}/${id}`, {
         method: 'DELETE'
     })
-    .then(() => loadTasks())  // Recarrega as tarefas após a exclusão
+    .then(() => loadTasks()) // Recarrega as tarefas após a exclusão
     .catch(error => console.error('Erro ao deletar a tarefa:', error));
 }
 
 // Função para alterar o status de conclusão e nome de uma tarefa
-function toggleTaskCompletion(id) {
+function toggleTaskCompletion(id, button) {
     // Primeiro, obtenha a tarefa e o status atual de conclusão
     fetch(`${apiUrl}/${id}`)
         .then(response => response.json())
         .then(task => {
             const updatedTask = {
-                name: task.name,  // Mantém o nome atual da tarefa
-                completed: !task.completed  // Alterna o status de conclusão
+                name: task.name, // Mantém o nome atual da tarefa
+                completed: !task.completed // Alterna o status de conclusão
             };
 
             // Envia a atualização para o backend
@@ -77,7 +77,12 @@ function toggleTaskCompletion(id) {
                 },
                 body: JSON.stringify(updatedTask)
             })
-            .then(() => loadTasks())  // Recarrega as tarefas após a alteração
+            .then(() => {
+                // Atualiza o botão no front
+                button.textContent = updatedTask.completed ? 'Desmarcar' : 'Marcar como concluída';
+                button.classList.toggle('completed-btn', updatedTask.completed); // Adiciona ou remove a classe de estilo
+                button.parentElement.querySelector('span').classList.toggle('completed', updatedTask.completed); // Atualiza o estilo do texto da tarefa
+            })
             .catch(error => console.error('Erro ao alterar o status da tarefa:', error));
         })
         .catch(error => console.error('Erro ao obter a tarefa:', error));
@@ -97,7 +102,7 @@ function updateTask(id, span) {
         },
         body: JSON.stringify(updatedTask)
     })
-    .then(() => loadTasks())  // Recarrega as tarefas após a alteração
+    .then(() => loadTasks()) // Recarrega as tarefas após a alteração
     .catch(error => console.error('Erro ao atualizar a tarefa:', error));
 }
 
