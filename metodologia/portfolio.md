@@ -19,16 +19,53 @@ Maven - Versão 3.8.1
 ### Desenvolvimento inicial do modelo de dados: 
 Muito atrelado às minhas demandas no trabalho e meus desenvolvimentos pessoais, logo puxei essa tarefa para que pudesse entender ainda melhor a relação entre tabelas, seus padrões de normalização e como otimizar o armazenamento de dados visando futuras consultas. 
 
-Além disso, realizei o desenvolvimento de 
+Além disso, realizei o desenvolvimento do diagrama de entidade e relacionamento para estruturar o banco e criação do DDL inicial da aplicação.
+
+![DER](images/der.png)
 
 ### Configuração de agendamento de tarefas CRON:
+Essa atividade me despertou muita curiosidade para entender como poderia executar tarefas de forma assíncrona e programada. Nesse desenvolvimento pude compreender como o Spring realiza a gestão dos beans e os mantém desempeanhado de forma automaticamente de acordo com as configurações definidas.
+
+Para adotar o agendamento de tarefas é necessário utilizar as seguintes tags, informando a adoção da tratativa na aplicação.
+```
+@Configuration
+@EnableScheduling
+```
+Em seguida, adotamos uma classe para gerir as ações do Cron. Nela foram informadas todas as características do schedule que haviam sido definidas no properties e os métodos responsáveis por integrar as tarefas que seriam agendadas.
+```
+@Value("${cron.expression:0 * * * * *}") 
+private String cronExpression;
+
+@Value("${cron.timeZone:America/Sao_Paulo}") 
+private String cronTimeZone;
+
+public CronManager() {
+    taskScheduler = new ThreadPoolTaskScheduler();
+    ((ThreadPoolTaskScheduler) taskScheduler).initialize();
+}
+```
 
 ### Implementação de controller para permitir personalização do agendamento:
+Após a configuração do cron, a próxima etapa era permitir que a funcionalidade fosse configurável de acordo com a necessidade do cliente. Foi realizada a implementação de mais uma api rest com objetivo de atualizar as configurações se agendamento de acordo com a nessecidade do usuário.
+```
+@Value("${cron.expression:0 * * * * *}") 
+private String cronExpression;
 
+@Value("${cron.timeZone:America/Sao_Paulo}") 
+private String cronTimeZone;
+
+public CronManager() {
+    taskScheduler = new ThreadPoolTaskScheduler();
+    ((ThreadPoolTaskScheduler) taskScheduler).initialize();
+}
+```
 ### Integração do agendamento para raspagem de dados web de notícias:
+Finalizado o processo de configuração do agendamento, iniciou-se o processo de integração com as tarefas de raspagem de dados para construção do acervo de notícias. Para isso, fizemos a integração entre os métodos automaticamente executados e as demais funções que seriam executadas.
+
+Na efetuação dessa task, foi necessário realment
 
 ### Aplicação de filtro de tags dinâmicos associados a portais de notícia:
-
+Desenvolvimento de filtros dinâmicos para listagem de notícias e portais de notícias. Realização de meio em que seriam exibidas apenas as tags vinculadas ao portal informado
 
 ## APRENDIZADOS EFETIVOS:
 ### HARDSKILLS
